@@ -4,6 +4,8 @@ import IndexPage from "./pages/index"
 import Cart from "./pages/cart"
 import SuccessPage from "./pages/success";
 import CancelPage from "./pages/cancel";
+import Login from "./pages/login";
+import Register from "./pages/register";
 function App() {
   return (
       <BrowserRouter>
@@ -13,6 +15,8 @@ function App() {
                   <Route path="/cart" element={<Cart />} />
                   <Route path="/success" element={<SuccessPage />} />
                   <Route path="/cancel" element={<CancelPage />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
               </Route>
           </Routes>
       </BrowserRouter>

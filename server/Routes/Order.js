@@ -1,10 +1,7 @@
 import express from "express";
-import {createCategory,caretgoryList} from "../Controllers/category.controller.js";
+import { orderList } from "../Controllers/order.controller.js";
+import auth from "../Middleware/auth.js";
 const router = express.Router();
 
-router.get("/",productList)
-router.post("/create",createProduct)
-router.put("/update/:id",updateProduct)
-router.delete("/delete/:id",deleteProduct)
-
+router.get("/", [auth], orderList);
 export default router
