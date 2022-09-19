@@ -36,7 +36,9 @@ export const generateSession = async (req,res) => {
             cancel_url: `${YOUR_DOMAIN}/cancel?session_id=${order._id}`,
         })
 
-        await orderLineModel.findByIdAndUpdate(order._id,{session_id:session.id})
+        await orderModel.findByIdAndUpdate(order._id, {
+          session_id: session.id,
+        });
         res.status(200).json({message:"payment session is generated successfully.!",session});
     } catch(err) {
         res.status(500).json({ message: "Something went wrong!", error: err.message  });

@@ -11,24 +11,30 @@ export const sign = async (req, res) => {
     const { username, password } = req.body;
     const existUser = await UserModel.findOne({ username });
     if (!existUser) {
-      return res.status(400).json({ message: "Username is not registered" });
+      return res
+        .status(400)
+        .json({ message: "Username is not registered", status: false });
     }
     if (existUser.is_active === false) {
-      return res.status(400).json({ message: "User is inactive" });
+      return res
+        .status(400)
+        .json({ message: "User is inactive", status: false });
     }
     const isPasswordCorrent = await bcrypt.compare(
       password,
       existUser.password
     );
     if (!isPasswordCorrent) {
-      return res.status(400).json({ message: "Invalid password" });
+      return res
+        .status(400)
+        .json({ message: "Invalid password", status: false });
     }
     const token = jwt.sign(
       { email: existUser.email, id: existUser._id },
       secret,
       { expiresIn: EXPIRE_TIME }
     );
-    res.status(200).json({ result: existUser, token });
+    res.status(200).json({ status: true, result: existUser, token });
   } catch (err) {
     res
       .status(500)
