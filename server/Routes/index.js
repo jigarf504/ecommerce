@@ -5,5 +5,5 @@ import Product from "./Product.js";
 const app = express();
 app.use("/auth",Auth);
 app.use("/category",Category);
-app.use("/product",Product)
+app.use("/products",Product)
 export default app;

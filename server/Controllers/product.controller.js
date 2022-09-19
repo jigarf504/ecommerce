@@ -7,9 +7,9 @@ export const productList = async (req,res) => {
         const startIndex = (Number(pageNumber) - 1) * pageSize; // get the starting index of every page
         const total = await productModel.find().countDocuments({});
         const products = await productModel.find().limit(Number(pageSize)).skip(Number(startIndex));
-        res.json({ entities: products, currentPage: Number(pageNumber), numberOfPages: Math.ceil(total / Number(pageNumber)), totalCount : total});
+        res.json({ status:true,entities: products, currentPage: Number(pageNumber), numberOfPages: Math.ceil(total / Number(pageNumber)), totalCount : total});
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ status:false,message: error.message });
     }
 }
 export const createProduct = async (req,res) => {
