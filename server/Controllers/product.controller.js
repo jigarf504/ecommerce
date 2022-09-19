@@ -1,12 +1,26 @@
 import productModel from "../Models/product.model.js";
 export const productList = async (req,res) => {
     try {
-        let { pageNumber, pageSize} = req.query;
+        let { pageNumber, pageSize,price,category} = req.query;
+        let queryParam = {};
+
+        if (category) {
+            queryParam['category'] = { '$in' : [category]}
+        }
+        if (price) {
+            let [min,max] = price.split("-")
+            if (max === undefined && min.indexOf(">=")) {
+                let priceValue = min.replace(">=","")
+                queryParam['price'] =  {  $gte : +priceValue}
+            } else {
+                queryParam['price'] = { $lte : +max, $gte : +min}
+            }
+        }
         pageNumber = pageNumber || 1
         pageSize = pageSize || 10
         const startIndex = (Number(pageNumber) - 1) * pageSize; // get the starting index of every page
-        const total = await productModel.find().countDocuments({});
-        const products = await productModel.find().limit(Number(pageSize)).skip(Number(startIndex));
+        const total = await productModel.find(queryParam).countDocuments({});
+        const products = await productModel.find(queryParam).limit(Number(pageSize)).skip(Number(startIndex));
         res.json({ status:true,entities: products, currentPage: Number(pageNumber), numberOfPages: Math.ceil(total / Number(pageNumber)), totalCount : total});
     } catch (error) {
         res.status(500).json({ status:false,message: error.message });

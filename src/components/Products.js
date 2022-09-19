@@ -1,15 +1,24 @@
 import React,{ useEffect,useState } from "react";
 import axios from "axios";
 import {Row,Col,Card,Button} from "react-bootstrap";
+import {useDispatch,useSelector} from "react-redux";
+import { useSearchParams } from 'react-router-dom';
+import {currency} from "../components/Currency";
+const Products = ({price,category}) => {
+    const [searchParams] = useSearchParams();
 
-const Products = () => {
+    const dispatch = useDispatch()
+    const carts = useSelector((state) => state.cart)
     const [products,setProducts] = useState([])
     useEffect(() => {
         fetchProduct()
-    },[])
+    },[price,category])
     async function fetchProduct() {
         try {
-            const {data} = await axios("products")
+            const {data} = await axios(`products`,{params:{
+                    price,
+                    category
+                }})
             if (data.status) {
                 setProducts(data.entities)
             }
@@ -24,6 +33,10 @@ const Products = () => {
             style: 'currency',
             currency: 'INR'
         });
+    }
+
+    function addToCart(product) {
+        console.log(product)
     }
 
     return (
@@ -44,7 +57,30 @@ const Products = () => {
                                 <Card.Text>
                                     {currency(product.price)}
                                 </Card.Text>
-                                <Button variant="primary">Add to cart</Button>
+                                {
+                                    carts.some((cart) => cart.id === product._id) ? (
+                                            <Button variant="danger" onClick={() => {
+                                                dispatch({
+                                                    type: "REMOVE_FROM_CART",
+                                                    payload: product._id
+                                                })
+                                            }}>Remove from cart</Button>
+                                    ) :
+                                    (
+                                        <Button variant="primary" onClick={() => {
+                                                dispatch({
+                                                type: "ADD_TO_CART",
+                                                payload: {
+                                                id:product._id,
+                                                name:product.name,
+                                                image:product.image,
+                                                qty:1,
+                                                price:product.price
+                                            }
+                                            })
+                                        }}>Add to cart</Button>
+                                    )
+                                }
                             </Card.Body>
                         </Card>
                     </Col>
