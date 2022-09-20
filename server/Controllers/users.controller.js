@@ -6,6 +6,7 @@ dotenv.config();
 const secret =
   process.env.TOKEN_SECRET || "MKd09Y6Gq9A4nmq1TYP8IB+WQ5bceHa3GAqMF";
 const EXPIRE_TIME = "1h";
+
 export const sign = async (req, res) => {
   try {
     const { username, password } = req.body;

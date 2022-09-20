@@ -26,6 +26,7 @@ const Login = () => {
       });
       if (status === 200 && data.status) {
         localStorage.setItem("auth_token", data.token);
+        localStorage.setItem("user_id", data.result._id);
         dispatch({
           type: "SET_USER",
           payload: data.result,

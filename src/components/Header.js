@@ -7,7 +7,7 @@ const Header = () => {
   const navigate = useNavigate();
   const cartCount = useSelector((state) => state.cart.length);
   const user = useSelector((state) => state.user);
-  const auth_token = localStorage.getItem("auth_token");
+  const user_id = localStorage.getItem("user_id") || "";
   return (
     <Navbar bg="light" expand="lg" fixed="top">
       <Container>
@@ -21,7 +21,7 @@ const Header = () => {
             <Nav.Link as={Link} to="/cart">
               <Badge bg="secondary">{cartCount}</Badge> Cart
             </Nav.Link>
-            {auth_token === null ? (
+            {!user_id ? (
               <Nav.Link as={Link} to="/login">
                 Login
               </Nav.Link>
@@ -30,7 +30,7 @@ const Header = () => {
             )}
           </Nav>
         </Navbar.Collapse>
-        {auth_token !== null ? (
+        {user_id ? (
           <NavDropdown title={user.name} id="basic-nav-dropdown">
             <NavDropdown.Item as={Link} to="/user/profile">
               Profile
@@ -41,7 +41,8 @@ const Header = () => {
             <NavDropdown.Divider />
             <NavDropdown.Item
               onClick={() => {
-                localStorage.setItem("auth_token", null);
+                localStorage.setItem("auth_token", "");
+                localStorage.setItem("user_id", "");
                 navigate("/");
               }}
             >
